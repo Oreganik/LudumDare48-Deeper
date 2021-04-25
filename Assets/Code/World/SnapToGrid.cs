@@ -9,6 +9,7 @@ namespace Jambox
 	/// <summary>
 	/// Forces objects to snap to a specified grid after being moved or rotated.
 	/// </summary>
+	[SelectionBase]
 	public class SnapToGrid : MonoBehaviour 
 	{
 		public bool SnapPosition = true;

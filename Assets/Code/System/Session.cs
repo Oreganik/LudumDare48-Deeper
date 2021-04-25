@@ -65,7 +65,7 @@ namespace Prototype
 
 		public static void StartNewGame ()
 		{
-			_levelId = -1;
+			_levelId = 0;
 			LoadNextLevel();
 		}
 

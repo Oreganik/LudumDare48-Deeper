@@ -10,9 +10,19 @@ namespace Prototype
 {
 	public class PoweredLight : MonoBehaviour 
 	{
+		public bool IsEmergencyLight;
+
+		public void SetLit (bool value, bool immediately = false)
+		{
+			gameObject.SetActive(value);
+		}
+
 		protected void Start ()
 		{
-			PowerStation.Instance.RegisterPoweredLight(this);
+			if (PowerStation.Instance)
+			{
+				PowerStation.Instance.RegisterPoweredLight(this);
+			}
 		}
 	}
 }

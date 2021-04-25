@@ -21,6 +21,11 @@ namespace Prototype
 		private HeroMove _move;
 		private HeroState _state;
 
+		public void AddFuse ()
+		{
+			
+		}
+
 		public void Die ()
 		{
 			Debug.Log("Hero died");
@@ -37,6 +42,8 @@ namespace Prototype
 
 		protected void Update ()
 		{
+			if (Dialog.Instance && Dialog.Instance.IsActive) return;
+			
 			_look.Process(_state);
 			_move.Process(_state);
 

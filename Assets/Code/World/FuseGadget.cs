@@ -14,19 +14,54 @@ namespace Prototype
 		public FuseState State { get; private set; }
 		public FuseDoor Door { get { return _door; } }
 
-		public GameObject _badFuse;
-		public GameObject _goodFuse;
 		public HeroTrigger _trigger;
+		public GameObject _fuseBadPrefab;
+		public GameObject _fuseGoodPrefab;
+		public Transform _fuseLocation;
+		public AudioSource _fuseRemove;
 
 		private FuseDoor _door;
 
-		public void SetFuseState (FuseState newState)
+		private GameObject _goodFuse;
+		private GameObject _badFuse;
+		private bool _showInstructions;
+
+		public void SetFuseState (FuseState newState, bool immediately = false)
 		{
 			State = newState;
 			_badFuse.SetActive(newState == FuseState.Bad);
 			_goodFuse.SetActive(newState == FuseState.Good);
+			if (newState == FuseState.Good) 
+			{
+				_door.Close(immediately);
+			}
+			else if (newState == FuseState.Empty)
+			{
+				if (immediately == false) _fuseRemove.Play();
+			}
 		}
 
+		private void HandleHeroEnterTrigger (HeroTriggerType triggerType)
+		{
+			if (triggerType != HeroTriggerType.Fuse)
+			{
+				Debug.LogError("Weird: " + this.GetType().ToString() + " received HeroTriggerType." + triggerType.ToString());
+				return;
+			}
+			_showInstructions = true;
+		}
+
+		private void HandleHeroExitTrigger (HeroTriggerType triggerType)
+		{
+			if (triggerType != HeroTriggerType.Fuse)
+			{
+				Debug.LogError("Weird: " + this.GetType().ToString() + " received HeroTriggerType." + triggerType.ToString());
+				return;
+			}
+			Instructions.Instance.Hide();
+			_showInstructions = false;
+		}
+		
 		private void HandleStartInteract (HeroTriggerType triggerType)
 		{
 			if (triggerType != HeroTriggerType.Fuse)
@@ -74,6 +109,10 @@ namespace Prototype
 				{
 					_door.Open();
 				}
+				else
+				{
+					Instructions.Instance.Hide();
+				}
 			}
 		}
 
@@ -81,6 +120,54 @@ namespace Prototype
 		{
 			_door = GetComponentInChildren<FuseDoor>();
 			_trigger.OnStartInteract += HandleStartInteract;
+			_trigger.OnHeroEnterTrigger += HandleHeroEnterTrigger;
+			_trigger.OnHeroExitTrigger += HandleHeroExitTrigger;
+
+			_badFuse = Instantiate(_fuseBadPrefab);
+			_badFuse.transform.parent = _fuseLocation.transform;
+			_badFuse.transform.localPosition = Vector3.zero;
+			_badFuse.transform.localRotation = Quaternion.Euler(Vector3.right * 90);
+
+			_goodFuse = Instantiate(_fuseGoodPrefab);
+			_goodFuse.transform.parent = _fuseLocation.transform;
+			_goodFuse.transform.localPosition = Vector3.zero;
+			_goodFuse.transform.localRotation = Quaternion.Euler(Vector3.right * 90);
+
+			_fuseLocation.GetComponent<Renderer>().enabled = false;
+		}
+
+		protected void Update ()
+		{
+			if (_showInstructions)
+			{
+				if (IsOpen)
+				{
+					switch (State)
+					{
+						case FuseState.Bad:
+							Instructions.Instance.Show("FUSE STATION", "Left mouse button or E to remove bad fuse");
+							break;
+
+						case FuseState.Empty:
+							Instructions.Instance.Show("FUSE STATION", "Left mouse button or E to insert good fuse");
+							break;
+
+						case FuseState.Good:
+							Instructions.Instance.Show("FUSE STATION", "Left mouse button or E to close fuse box");
+							break;
+
+						
+					}
+				}
+				// If the door is closed, and the fuse is not good, open it
+				else
+				{
+					if (State != FuseState.Good)
+					{
+						Instructions.Instance.Show("FUSE STATION", "Left mouse button or E to open fuse box");
+					}
+				}
+			}
 		}
 	}
 }

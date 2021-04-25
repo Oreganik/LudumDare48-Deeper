@@ -10,24 +10,25 @@ namespace Prototype
 {
 	public class FuseStation : MonoBehaviour 
 	{
-		public bool IsWorking
-		{
-			get { return IsFuseReady && _gear.IsReady; }
-		}
-
 		public bool IsFuseReady
 		{
 			get { return _fuse.State == FuseState.Good && _fuse.Door.IsClosed; }
 		}
 
+		public bool IsMotorReady
+		{
+			get { return _gear.IsReady; }
+		}
+
 		public bool StartOpen;
 		public FuseState StartFuseState;
+		public bool StartCranked;
 		public TMPro.TMP_Text _debugText;
 
 		private FuseGadget _fuse;
 		private GearGadget _gear;
 
-		protected void Awake ()
+		protected void Start ()
 		{
 			_fuse = GetComponentInChildren<FuseGadget>();
 			_gear = GetComponentInChildren<GearGadget>();
@@ -40,8 +41,16 @@ namespace Prototype
 			{
 				_fuse.Door.Close(immediately: true);
 			}
+			_fuse.SetFuseState(StartFuseState, immediately: true);
 
-			_fuse.SetFuseState(StartFuseState);
+			if (StartCranked)
+			{
+				_gear.SetToComplete(immediately: true);
+			}
+			else
+			{
+				_gear.ResetToZero(immediately: true);
+			}
 		}
 
 		protected void Update ()

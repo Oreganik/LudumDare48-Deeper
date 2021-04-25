@@ -16,19 +16,18 @@ namespace Prototype
 
 		public bool _startsPowered = true;
 		public TMPro.TMP_Text _debugText;
+		public AudioSource _soundOff;
+		public AudioSource _soundOn;
 
-		private List<EmergencyLight> _emergencyLights;
 		private List<PoweredLight> _poweredLights;
 		private bool _initialized;
-
-		public void RegisterEmergencyLight (EmergencyLight light)
-		{
-			_emergencyLights.Add(light);
-		}
+		private bool _showInstructions;
 
 		public void RegisterPoweredLight (PoweredLight light)
 		{
 			_poweredLights.Add(light);
+			if (light.IsEmergencyLight) light.SetLit(!HasPower, immediately: true);
+			else light.SetLit(HasPower, immediately: true);
 		}
 
 		public void TogglePower ()
@@ -37,36 +36,53 @@ namespace Prototype
 			else TurnOn();
 		}
 
-		public void TurnOff ()
+		public void TurnOff (bool playSound = true)
 		{
 			Debug.Log("Turn off power");
 			HasPower = false;
 
-			foreach (EmergencyLight light in _emergencyLights)
-			{
-				light.gameObject.SetActive(!HasPower);
-			}
-
 			foreach (PoweredLight light in _poweredLights)
 			{
-				light.gameObject.SetActive(HasPower);
+				if (light.IsEmergencyLight) light.SetLit(!HasPower);
+				else light.SetLit(HasPower);
 			}
+
+			if (playSound) _soundOff.Play();
 		}
 
-		public void TurnOn ()
+		public void TurnOn (bool playSound = true)
 		{
 			Debug.Log("Turn on power");
 			HasPower = true;
 
-			foreach (EmergencyLight light in _emergencyLights)
-			{
-				light.gameObject.SetActive(!HasPower);
-			}
-
 			foreach (PoweredLight light in _poweredLights)
 			{
-				light.gameObject.SetActive(HasPower);
+				if (light.IsEmergencyLight) light.SetLit(!HasPower);
+				else light.SetLit(HasPower);
 			}
+
+			if (playSound) _soundOn.Play();
+		}
+
+		private void HandleHeroEnterTrigger (HeroTriggerType triggerType)
+		{
+			if (triggerType != HeroTriggerType.Power)
+			{
+				Debug.LogError("Weird: " + this.GetType().ToString() + " received HeroTriggerType." + triggerType.ToString());
+				return;
+			}
+			_showInstructions = true;
+		}
+
+		private void HandleHeroExitTrigger (HeroTriggerType triggerType)
+		{
+			if (triggerType != HeroTriggerType.Power)
+			{
+				Debug.LogError("Weird: " + this.GetType().ToString() + " received HeroTriggerType." + triggerType.ToString());
+				return;
+			}
+			Instructions.Instance.Hide();
+			_showInstructions = false;
 		}
 
 		private void HandleHeroInteract (HeroTriggerType triggerType)
@@ -82,9 +98,11 @@ namespace Prototype
 		protected void Awake ()
 		{
 			Instance = this;
-			_emergencyLights = new List<EmergencyLight>();
 			_poweredLights = new List<PoweredLight>();
-			GetComponentInChildren<HeroTrigger>().OnStartInteract += HandleHeroInteract;
+			HeroTrigger _trigger = GetComponentInChildren<HeroTrigger>();
+			_trigger.OnStartInteract += HandleHeroInteract;
+			_trigger.OnHeroEnterTrigger += HandleHeroEnterTrigger;
+			_trigger.OnHeroExitTrigger += HandleHeroExitTrigger;
 		}
 
 		protected void Update ()
@@ -94,11 +112,11 @@ namespace Prototype
 			{
 				if (_startsPowered)
 				{
-					TurnOn();
+					TurnOn(playSound: false);
 				}
 				else
 				{
-					TurnOff();
+					TurnOff(playSound: false);
 				}
 				_initialized = true;
 			}
@@ -111,6 +129,18 @@ namespace Prototype
 			else
 			{
 				_debugText.enabled = false;
+			}
+
+			if (_showInstructions)
+			{
+				if (HasPower)
+				{
+					Instructions.Instance.Show("Generator", "Left mouse button or E to turn off");
+				}
+				else
+				{
+					Instructions.Instance.Show("Generator", "Left mouse button or E to turn on");
+				}
 			}
 		}
 	}

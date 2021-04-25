@@ -14,8 +14,8 @@ namespace Prototype
 		const float GEAR_ROTATION = 270;
 		const float WAIT_DURATION = 1;
 		const float OPEN_DURATION = 2;
-		const float CLOSE_DURATION = 1;
-		const float OPEN_DISTANCE = 1;
+		const float CLOSE_DURATION = 2f;
+		const float OPEN_DISTANCE = 1.3f;
 
 		public enum State { Closed, Unlocking, WaitToOpen, Opening, Open, Closing, Locking }
 		
@@ -33,24 +33,26 @@ namespace Prototype
 		private Vector3 _closePosition;
 		private Vector3 _openPosition;
 
-		public void Close ()
+		public bool Close ()
 		{
 			if (_state != State.Open)
 			{
 				Debug.LogError("Can't close door " + gameObject.name + " while in State." + _state, gameObject);
-				return;
+				return false;
 			}
 			GoToState(State.Closing);
+			return true;
 		}
 
-		public void Open ()
+		public bool Open ()
 		{
 			if (_state != State.Closed)
 			{
 				Debug.LogError("Can't open door " + gameObject.name + " while in State." + _state, gameObject);
-				return;
+				return false;
 			}
 			GoToState(State.Unlocking);
+			return true;
 		}
 
 		private void GoToState (State nextState)
@@ -63,6 +65,8 @@ namespace Prototype
 		{
 			_closePosition = transform.localPosition;
 			_openPosition = _closePosition + Vector3.right * OPEN_DISTANCE * _openDirection;
+			_frontAxis.localRotation = Quaternion.Euler(Vector3.forward * GEAR_ROTATION);
+			_backAxis.localRotation = Quaternion.Euler(Vector3.back * GEAR_ROTATION);
 		}
 
 		protected void Update ()
@@ -78,7 +82,7 @@ namespace Prototype
 			{
 				case State.Unlocking:
 					t = Mathf.Clamp01(_timer / UNLOCK_DURATION);
-					rotation = t * GEAR_ROTATION;
+					rotation = (1 - t) * GEAR_ROTATION;
 					_frontAxis.localRotation = Quaternion.Euler(Vector3.forward * rotation);
 					_backAxis.localRotation = Quaternion.Euler(Vector3.back * rotation);
 					if (t >= 1) 
@@ -115,7 +119,7 @@ namespace Prototype
 
 				case State.Locking:
 					t = Mathf.Clamp01(_timer / UNLOCK_DURATION);
-					rotation = (1 - t) * GEAR_ROTATION;
+					rotation = t * GEAR_ROTATION;
 					_frontAxis.localRotation = Quaternion.Euler(Vector3.forward * rotation);
 					_backAxis.localRotation = Quaternion.Euler(Vector3.back * rotation);
 					if (t >= 1) 
