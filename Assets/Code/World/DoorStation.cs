@@ -64,16 +64,25 @@ namespace Prototype
 		public HeroTrigger _doorTrigger;
 		public AudioSource _openAudio;
 		public AudioSource _closeAudio;
+		public bool _allowHeroToCloseDoor;
 
 		private bool _showInstructions;
+		private bool _closeAfterFinishingOpen;
 
-		public void Close ()
+		public void Close (bool autoCloseIfOpening = false)
 		{
-			if (_door0.Close())
+			if (CanBeClosed)
 			{
-				_closeAudio.Play();
+				if (_door0.Close())
+				{
+					_closeAudio.Play();
+				}
+				_door1.Close();
 			}
-			_door1.Close();
+			else
+			{
+				_closeAfterFinishingOpen = autoCloseIfOpening;
+			}
 		}
 
 		public void Open ()
@@ -136,7 +145,7 @@ namespace Prototype
 			{
 				Open();
 			}
-			else if (CanBeClosed)
+			else if (CanBeClosed && _allowHeroToCloseDoor)
 			{
 				Close();
 			}
@@ -181,15 +190,24 @@ namespace Prototype
 				}
 				else if (CanBeOpened)
 				{
-					Instructions.Instance.Show("Security Door", "Left mouse button or E to open");
+					Instructions.Instance.Show("Security Door", "Left click or E to open");
 				}
-				else if (CanBeClosed)
+				else if (CanBeClosed && _allowHeroToCloseDoor)
 				{
-					Instructions.Instance.Show("Security Door", "Left mouse button or E to close");
+					Instructions.Instance.Show("Security Door", "Left click or E to close");
 				}
 				else
 				{
 					Instructions.Instance.Hide();
+				}
+			}
+
+			if (_closeAfterFinishingOpen)
+			{
+				if (CanBeClosed)
+				{
+					Close();
+					_closeAfterFinishingOpen = false;
 				}
 			}
 		}

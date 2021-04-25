@@ -30,7 +30,7 @@ namespace Prototype
 
 			Debug.Log("Close and block door");
 			_collider.SetActive(true);
-			_door.Close();
+			_door.Close(autoCloseIfOpening: true);
 		}
 
 		protected void Awake ()

@@ -31,6 +31,7 @@ namespace Prototype
 		public Transform _actualGearAxis;
 		public Transform _wrench;
 		public Transform _wrenchAxis;
+		public PoweredLight _poweredLight;
 
 		private float _timer;
 		private float _turns;
@@ -53,6 +54,7 @@ namespace Prototype
 			PercentComplete = 0;
 			_actualGearAxis.localRotation = Quaternion.Euler(0, 180, PercentComplete * 180);
 			_state = State.Idle;
+			_poweredLight.SetLit(false, immediately);
 		}
 
 		public void SetToComplete (bool immediately = false)
@@ -61,6 +63,7 @@ namespace Prototype
 			PercentComplete = 1;
 			_actualGearAxis.localRotation = Quaternion.Euler(0, 180, PercentComplete * 180);
 			_state = State.Idle;
+			_poweredLight.SetLit(true, immediately);
 		}
 
 		private void HandleHeroEnterTrigger (HeroTriggerType triggerType)
@@ -138,7 +141,7 @@ namespace Prototype
 				}
 				else if (_state == State.Idle && IsReady == false)
 				{
-					Instructions.Instance.Show("Door Motor", "Left mouse button or E to crank start");
+					Instructions.Instance.Show("Door Motor", "Left click or E to crank start");
 				}
 				else
 				{
@@ -164,6 +167,11 @@ namespace Prototype
 					_state = State.Reset;
 				}
 				PercentComplete += _turns / TURNS_REQUIRED;
+				// oog
+				if (PercentComplete >= 1)
+				{
+					_poweredLight.SetLit(true);
+				}
 				_actualGearAxis.localRotation = Quaternion.Euler(0, 180, PercentComplete * 180);
 			}
 			else if (_state == State.Reset)

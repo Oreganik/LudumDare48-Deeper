@@ -25,6 +25,22 @@ namespace Prototype
 		public void Process (HeroState state)
 		{
 			if (state == HeroState.Dead) return;
+			
+			if (state == HeroState.Dialog) 
+			{
+				if (Hero.Instance.HasLookTarget)
+				{
+					Vector3 turnDirection = (Hero.Instance.LookTarget - transform.position).normalized;
+					turnDirection.y = 0;
+					transform.rotation = Quaternion.Lerp(transform.rotation, Quaternion.LookRotation(turnDirection, Vector3.up), 0.05f);
+
+					Vector3 lookDirection = (Hero.Instance.LookTarget - _cameraTransform.position).normalized;
+					_pitch = Mathf.Lerp(_pitch, lookDirection.x, 0.05f);
+					_pitch = Mathf.Clamp(_pitch, _minPitch, _maxPitch);
+					_cameraTransform.localRotation = Quaternion.Euler(Vector3.right * _pitch);
+				}
+				return;
+			}
 
 			Cursor.lockState = CursorLockMode.Locked;
 			Cursor.visible = false;

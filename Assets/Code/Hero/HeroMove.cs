@@ -19,6 +19,12 @@ namespace Prototype
 		public void Process (HeroState state)
 		{
 			if (state == HeroState.Dead) return;
+			
+			if (state == HeroState.Dialog)
+			{
+				_velocity = Vector3.zero;
+				return;
+			}
 
 			float x = (Input.GetKey(KeyCode.A) || Input.GetKey(KeyCode.LeftArrow)) ? -1 : 0;
 			x +=  (Input.GetKey(KeyCode.D) || Input.GetKey(KeyCode.RightArrow)) ? 1 : 0;

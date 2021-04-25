@@ -19,6 +19,7 @@ namespace Prototype
 		public GameObject _fuseGoodPrefab;
 		public Transform _fuseLocation;
 		public AudioSource _fuseRemove;
+		public PoweredLight _poweredLight;
 
 		private FuseDoor _door;
 
@@ -31,6 +32,7 @@ namespace Prototype
 			State = newState;
 			_badFuse.SetActive(newState == FuseState.Bad);
 			_goodFuse.SetActive(newState == FuseState.Good);
+			_poweredLight.SetLit((newState == FuseState.Good), immediately);
 			if (newState == FuseState.Good) 
 			{
 				_door.Close(immediately);
@@ -145,15 +147,15 @@ namespace Prototype
 					switch (State)
 					{
 						case FuseState.Bad:
-							Instructions.Instance.Show("FUSE STATION", "Left mouse button or E to remove bad fuse");
+							Instructions.Instance.Show("FUSE STATION", "Left click or E to remove bad fuse");
 							break;
 
 						case FuseState.Empty:
-							Instructions.Instance.Show("FUSE STATION", "Left mouse button or E to insert good fuse");
+							Instructions.Instance.Show("FUSE STATION", "Left click or E to insert good fuse");
 							break;
 
 						case FuseState.Good:
-							Instructions.Instance.Show("FUSE STATION", "Left mouse button or E to close fuse box");
+							Instructions.Instance.Show("FUSE STATION", "Left click or E to close fuse box");
 							break;
 
 						
@@ -164,7 +166,7 @@ namespace Prototype
 				{
 					if (State != FuseState.Good)
 					{
-						Instructions.Instance.Show("FUSE STATION", "Left mouse button or E to open fuse box");
+						Instructions.Instance.Show("FUSE STATION", "Left click or E to open fuse box");
 					}
 				}
 			}

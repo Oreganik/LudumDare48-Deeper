@@ -52,6 +52,8 @@ namespace Prototype
 			{
 				OnDialogClose();
 			}
+			Hero.Instance.ClearDialogLookTarget();
+			HeroCamera.Instance.ResetZoom();
 		}
 
 		public void ShowBaked (string[] lines)

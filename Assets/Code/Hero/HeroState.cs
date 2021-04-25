@@ -11,6 +11,7 @@ namespace Prototype
 	public enum HeroState 
 	{
 		Ground,
-		Dead
+		Dead,
+		Dialog
 	}
 }

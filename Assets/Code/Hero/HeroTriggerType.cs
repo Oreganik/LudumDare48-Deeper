@@ -17,6 +17,8 @@ namespace Prototype
 		Power,
 		Door,
 		PullFuseFromRobot,
-		WalkThroughDoor
+		WalkThroughDoor,
+		Elevator,
+		Dialog
 	}
 }

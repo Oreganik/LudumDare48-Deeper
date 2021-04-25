@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: 5945f58adcd4c4edeaeb0bade10f7354
+guid: b4eb1656b7157419d8afd592dd5f2393
 TrueTypeFontImporter:
   externalObjects: {}
   serializedVersion: 4
@@ -9,7 +9,7 @@ TrueTypeFontImporter:
   characterPadding: 1
   includeFontData: 1
   fontNames:
-  - pixelmix bold
+  - Capture it
   fallbackFontReferences: []
   customCharacters: 
   fontRenderingMode: 0

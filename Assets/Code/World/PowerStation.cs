@@ -135,11 +135,11 @@ namespace Prototype
 			{
 				if (HasPower)
 				{
-					Instructions.Instance.Show("Generator", "Left mouse button or E to turn off");
+					Instructions.Instance.Show("Generator", "Left click or E to turn off");
 				}
 				else
 				{
-					Instructions.Instance.Show("Generator", "Left mouse button or E to turn on");
+					Instructions.Instance.Show("Generator", "Left click or E to turn on");
 				}
 			}
 		}

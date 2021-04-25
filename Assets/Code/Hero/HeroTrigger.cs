@@ -20,6 +20,8 @@ namespace Prototype
 		public HeroTriggerType _triggerType;
 		public bool _ignoreHeroRotation;
 		public bool _autoTrigger;
+		public GameObject _lookTargetOverride;
+		public bool _ignoreLookPitch;
 
 		private bool _isActive;
 
@@ -87,7 +89,11 @@ namespace Prototype
 				if (_ignoreHeroRotation == false)
 				{
 					// Hero must be facing parent object to trigger interaction
-					Vector3 directionHeroToGadget = (transform.parent.position - Hero.Instance.transform.position).normalized;
+					Vector3 lookTarget = _lookTargetOverride != null ? _lookTargetOverride.transform.position : transform.parent.position;
+
+					if (_ignoreLookPitch) lookTarget.y = Hero.Instance.transform.position.y;
+					
+					Vector3 directionHeroToGadget = (lookTarget - Hero.Instance.transform.position).normalized;
 					float dot = Vector3.Dot(Hero.Instance.transform.forward, directionHeroToGadget);
 					if (dot < 0.6f)
 					{
@@ -98,6 +104,7 @@ namespace Prototype
 				
 				if (OnStartInteract != null)
 				{
+					Debug.Log("Start Interact", gameObject);
 					OnStartInteract(_triggerType);
 				}
 			}
