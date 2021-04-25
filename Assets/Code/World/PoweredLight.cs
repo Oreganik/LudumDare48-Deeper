@@ -12,13 +12,16 @@ namespace Prototype
 	{
 		public bool IsEmergencyLight;
 
+		private Light _light;
+
 		public void SetLit (bool value, bool immediately = false)
 		{
-			gameObject.SetActive(value);
+			_light.gameObject.SetActive(value);
 		}
 
 		protected void Start ()
 		{
+			_light = GetComponentInChildren<Light>();
 			if (PowerStation.Instance)
 			{
 				PowerStation.Instance.RegisterPoweredLight(this);
