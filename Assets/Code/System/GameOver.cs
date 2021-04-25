@@ -13,7 +13,7 @@ namespace Prototype
 	{
 		public void ClickConfirmGameOver ()
 		{
-			SceneManager.LoadScene("Title", LoadSceneMode.Single);
+			App.ExitGame();
 		}
 
 		public void ClickVote ()

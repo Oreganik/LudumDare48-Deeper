@@ -8,11 +8,12 @@ using UnityEngine;
 
 namespace Prototype
 {
-	public enum HeroState 
+	public class App : MonoBehaviour 
 	{
-		Ground,
-		Dead,
-		Dialog,
-		Options
+		public static void ExitGame ()
+		{
+			Application.OpenURL("https://ldjam.com/events/ludum-dare/48/ctrl-base-zero");
+			Application.Quit();
+		}
 	}
 }

@@ -32,6 +32,7 @@ namespace Prototype
 		public Transform _wrench;
 		public Transform _wrenchAxis;
 		public PoweredLight _poweredLight;
+		public AudioSource _activateSound;
 
 		private float _timer;
 		private float _turns;
@@ -64,6 +65,7 @@ namespace Prototype
 			_actualGearAxis.localRotation = Quaternion.Euler(0, 180, PercentComplete * 180);
 			_state = State.Idle;
 			_poweredLight.SetLit(true, immediately);
+			if (immediately == false) _activateSound.Play();
 		}
 
 		private void HandleHeroEnterTrigger (HeroTriggerType triggerType)
@@ -170,6 +172,7 @@ namespace Prototype
 				// oog
 				if (PercentComplete >= 1)
 				{
+					_activateSound.Play();
 					_poweredLight.SetLit(true);
 				}
 				_actualGearAxis.localRotation = Quaternion.Euler(0, 180, PercentComplete * 180);

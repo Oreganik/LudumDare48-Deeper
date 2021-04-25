@@ -20,7 +20,7 @@ namespace Prototype
 		{
 			if (state == HeroState.Dead) return;
 			
-			if (state == HeroState.Dialog)
+			if (state == HeroState.Dialog || state == HeroState.Options)
 			{
 				_velocity = Vector3.zero;
 				return;

@@ -62,10 +62,23 @@ namespace Prototype
 
 		protected void Update ()
 		{
+			if (Input.GetKeyDown(KeyCode.Escape))
+			{
+				if (OptionsMenu.Instance && OptionsMenu.Instance.IsOpen == false)
+				{
+					OptionsMenu.Instance.Open();
+				}
+			}
+
 			if (Dialog.Instance && Dialog.Instance.IsActive)
 			{
 				_look.Process(HeroState.Dialog);
 				_move.Process(HeroState.Dialog);
+			}
+			else if (OptionsMenu.Instance && OptionsMenu.Instance.IsOpen)
+			{
+				_look.Process(HeroState.Options);
+				_move.Process(HeroState.Options);
 			}
 			else
 			{
@@ -75,7 +88,7 @@ namespace Prototype
 
 			if (Input.GetKeyDown(KeyCode.Slash))
 			{
-				Session.ToggleDebugVisible();
+				//Session.ToggleDebugVisible();
 			}
 		}
 	}

@@ -12,15 +12,15 @@ namespace Prototype
 	{
 		public static string[] Dialog_Start = new string[] 
 		{
-			"The emergency beacon went off a few hours ago.",
-			"But I've never seen this place so quiet.",
+			"I've never seen this place so quiet.",
 			"Not a good sign."
 		};
 
 		public static string[] Dialog_OuterDoor = new string[]
 		{
-			"Huh. The Fuse is good, and Power is on.",
-			"I just need to find the reset crank for the Motor."
+			"Interesting.",
+			"Good fuse, steady power, but the door motor is off.",
+			"If there's a crank nearby, I can manually restart it."
 		};
 
 		public static string[] Dialog_PowerOutage = new string[]
@@ -32,7 +32,6 @@ namespace Prototype
 
 		public static string[] Dialog_Elevator = new string[]
 		{
-
 			"I hate this place."
 		};
 

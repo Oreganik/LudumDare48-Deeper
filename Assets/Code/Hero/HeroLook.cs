@@ -10,8 +10,7 @@ namespace Prototype
 {
 	public class HeroLook : MonoBehaviour 
 	{
-		public static float SensitivityX = 1;
-		public static float SensitivityY = 1;
+		public static float Sensitivity = 0.5f;
 		public static bool InvertY = true;
 
 		public float _rotateSpeed = 360;
@@ -42,6 +41,13 @@ namespace Prototype
 				return;
 			}
 
+			if (state == HeroState.Options)
+			{
+				Cursor.lockState = CursorLockMode.Confined;
+				Cursor.visible = true;
+				return;
+			}
+
 			Cursor.lockState = CursorLockMode.Locked;
 			Cursor.visible = false;
 
@@ -56,10 +62,10 @@ namespace Prototype
 				}
 			}
 
-			float rotate = inputX * SensitivityX * _rotateSpeed * Time.deltaTime;
+			float rotate = inputX * Sensitivity * _rotateSpeed * Time.deltaTime;
 			transform.Rotate(Vector3.up * rotate, Space.World);
 
-			float pitchInput = inputY * SensitivityY * _pitchSpeed * Time.deltaTime;
+			float pitchInput = inputY * Sensitivity * _pitchSpeed * Time.deltaTime;
 			if (InvertY) pitchInput *= -1;
 
 			_pitch = Mathf.Clamp(_pitch + pitchInput, _minPitch, _maxPitch);
