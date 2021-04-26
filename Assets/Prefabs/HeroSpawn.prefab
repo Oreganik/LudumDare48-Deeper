@@ -92,7 +92,6 @@ GameObject:
   - component: {fileID: 1282812864266203695}
   - component: {fileID: 1282812864266203694}
   - component: {fileID: 1282812864266203693}
-  - component: {fileID: 1947454662836548315}
   m_Layer: 0
   m_Name: HeroSpawn
   m_TagString: Untagged
@@ -145,15 +144,3 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _heroPrefab: {fileID: 4511120667348932527, guid: 2d1dcebb712754e59952acc95f13ea1f, type: 3}
---- !u!114 &1947454662836548315
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1282812864266203692}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: fbc4e8c4b1f054cd8a820dff3cf18686, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 

@@ -141,6 +141,7 @@ namespace Prototype
 		{
 			if (_initialized == false)
 			{
+				if (Dialog.Instance == null) return;
 				StartDialog(DialogName.Start);
 				_inside.SetActive(false);
 				_outerTrigger.OnAutoTrigger += HandleAutoTrigger;
