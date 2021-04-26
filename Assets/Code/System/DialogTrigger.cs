@@ -12,6 +12,8 @@ namespace Prototype
 	{
 		public Level01.DialogName _level1Dialog;
 
+		public string[] _lines;
+
 		public Level01 _level1;
 		public GameObject _lookTarget;
 		public float _zoomFov;
@@ -22,8 +24,16 @@ namespace Prototype
 		private void HandleAutoTrigger (HeroTriggerType triggerType)
 		{
 			_heroTrigger.OnAutoTrigger -= HandleAutoTrigger;
-			Debug.Log("Trigger level 1 dialog " + _level1Dialog);
-			_level1.StartDialog(_level1Dialog);
+
+			if (_level1)
+			{
+				Debug.Log("Trigger level 1 dialog " + _level1Dialog);
+				_level1.StartDialog(_level1Dialog);
+			}
+			else
+			{
+				Dialog.Instance.ShowBaked(_lines);
+			}
 
 			if (_lookTarget)
 			{

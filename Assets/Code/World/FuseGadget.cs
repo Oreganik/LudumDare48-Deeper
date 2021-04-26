@@ -87,15 +87,19 @@ namespace Prototype
 						SetFuseState(FuseState.Empty);
 						if (PowerStation.Instance.HasPower)
 						{
-							Hero.Instance.Die();
+							//Hero.Instance.Die();
 						}
 						break;
 
 					case FuseState.Empty:
-						SetFuseState(FuseState.Good);
-						if (PowerStation.Instance.HasPower)
+						if (Hero.Instance.FuseCount > 0)
 						{
-							Hero.Instance.Die();
+							Hero.Instance.RemoveFuse();
+							SetFuseState(FuseState.Good);
+							if (PowerStation.Instance.HasPower)
+							{
+								//Hero.Instance.Die();
+							}
 						}
 						break;
 
@@ -151,7 +155,14 @@ namespace Prototype
 							break;
 
 						case FuseState.Empty:
-							Instructions.Instance.Show("FUSE STATION", "Left click or E to insert good fuse");
+							if (Hero.Instance.FuseCount > 0)
+							{
+								Instructions.Instance.Show("FUSE STATION", "Left click or E to insert good fuse");
+							}
+							else
+							{
+								Instructions.Instance.Show("FUSE STATION", "You need a fuse to insert here");
+							}
 							break;
 
 						case FuseState.Good:

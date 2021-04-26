@@ -30,7 +30,8 @@ namespace Prototype
 			x +=  (Input.GetKey(KeyCode.D) || Input.GetKey(KeyCode.RightArrow)) ? 1 : 0;
 			float z = (Input.GetKey(KeyCode.W) || Input.GetKey(KeyCode.UpArrow)) ? 1 : 0;
 			z +=  (Input.GetKey(KeyCode.S) || Input.GetKey(KeyCode.DownArrow)) ? -1 : 0;
-			float speed = (Input.GetKey(KeyCode.LeftShift) || Input.GetKey(KeyCode.RightShift)) ? _runSpeed : _moveSpeed;
+			//float speed = (Input.GetKey(KeyCode.LeftShift) || Input.GetKey(KeyCode.RightShift)) ? _runSpeed : _moveSpeed;
+			float speed = _moveSpeed;
 
 			_velocity = transform.TransformVector(new Vector3(x, 0, z)) * speed;
 		}

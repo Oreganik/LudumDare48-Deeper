@@ -32,7 +32,28 @@ namespace Prototype
 		private Quaternion _targetRotation;
 		private float _rotation = 0;
 		private GameObject _fuseObject;
+		private bool _showInstructions;
 
+		public void FallOver ()
+		{
+			Rigidbody rb = GetComponent<Rigidbody>();
+			rb.isKinematic = false;
+			rb.useGravity = true;
+			rb.constraints = RigidbodyConstraints.None;
+			rb.angularVelocity = UnityEngine.Random.insideUnitSphere * 10;
+			_disabled = true;
+		}
+
+		private void HandleHeroEnterTrigger (HeroTriggerType triggerType)
+		{
+			_showInstructions = true;
+		}
+
+		private void HandleHeroExitTrigger (HeroTriggerType triggerType)
+		{
+			Instructions.Instance.Hide();
+			_showInstructions = false;
+		}
 
 		private void HandleStartInteract (HeroTriggerType triggerType)
 		{
@@ -49,13 +70,14 @@ namespace Prototype
 			}
 
 			Hero.Instance.AddFuse();
-			Destroy(_fuseObject);
-			if (_fuseObject) _fuseObject = null;
-			Rigidbody rb = GetComponent<Rigidbody>();
-			rb.isKinematic = false;
-			rb.useGravity = true;
-			rb.constraints = RigidbodyConstraints.None;
-			rb.angularVelocity = UnityEngine.Random.insideUnitSphere * 10;
+			if (_fuseObject)
+			{
+				Destroy(_fuseObject);
+				_fuseObject = null;
+			}
+			FallOver();
+			Instructions.Instance.Hide();
+			_showInstructions = false;
 		}
 
 		protected void Awake ()
@@ -71,16 +93,28 @@ namespace Prototype
 				_fuseObject.transform.rotation = _fuseLocation.rotation;
 				_fuseObject.transform.Rotate(Vector3.right * 90, Space.Self);
 
-				GetComponentInChildren<HeroTrigger>().OnStartInteract += HandleStartInteract;
+				HeroTrigger trigger = GetComponentInChildren<HeroTrigger>();
+				trigger.OnStartInteract += HandleStartInteract;
+				trigger.OnHeroEnterTrigger += HandleHeroEnterTrigger;
+				trigger.OnHeroExitTrigger += HandleHeroExitTrigger;
 			}
 
 			_fuseLocation.gameObject.SetActive(false);
 
+			if (_disabled)
+			{
+				FallOver();
+			}
 		}
 
 		protected void Update ()
 		{
 			if (_disabled) return;
+
+			if (_showInstructions && _fuseObject)
+			{
+				Instructions.Instance.Show("Fuse", "Left click or E to pull fuse");
+			}
 
 			float t = 0;
 			switch (_state)
