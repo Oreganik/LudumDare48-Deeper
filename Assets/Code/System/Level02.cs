@@ -26,7 +26,7 @@ namespace Prototype
 		private void HandleAutoTriggerTorch (HeroTriggerType type)
 		{
 			_torchTrigger.OnAutoTrigger -= HandleAutoTriggerTorch;
-			Dialog.Instance.ShowDynamic("Glad I brought a flashlight.", "But maybe not instead of a gun.");
+			Dialog.Instance.ShowDynamic("Glad I brought a flashlight.", "But at this point, I would have preferred a gun.");
 			_torch.gameObject.SetActive(true);
 			_torch.transform.parent = Hero.Instance.transform;
 			_torch.transform.localPosition = (Vector3.up * 1.5f) + (_torch.transform.forward * 0.3f);

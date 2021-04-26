@@ -85,7 +85,7 @@ PrefabInstance:
     - target: {fileID: -6652725513331149018, guid: 086899385988b415eb2429f3d9b92577, type: 3}
       propertyPath: m_Materials.Array.data[0]
       value: 
-      objectReference: {fileID: 2100000, guid: 3cea23a3a329340079a4c1646e9a451c, type: 2}
+      objectReference: {fileID: 2100000, guid: e0790b1ee1aac44d2826221cdfc1185b, type: 2}
     - target: {fileID: 919132149155446097, guid: 086899385988b415eb2429f3d9b92577, type: 3}
       propertyPath: m_Name
       value: Fuse
